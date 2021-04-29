@@ -1,0 +1,31 @@
+.inner-form {
+  padding: 50px 47px;
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 75%;
+  margin: 0 auto;
+}
+
+.input-field.first-wrap {
+  flex-grow: 1;
+}
+
+@media (max-width: 768px) {
+  .inner-form {
+    padding: 50px 10px;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 425px) {
+  .inner-form {
+    padding: 20px 10px;
+    display: block;
+  }
+
+  .input-field.first-wrap {
+    margin-bottom: 5px;
+  }
+}

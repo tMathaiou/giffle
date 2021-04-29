@@ -1,24 +1,49 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useEffect } from 'react';
 import './App.css';
+import Logo from './components/logo/Logo';
+import { useDispatch, useSelector } from 'react-redux';
+import Search from './components/search/Search';
+import { fetchImages } from './state/app.actions';
+import Grid from './components/grid/Grid';
+import { toast } from 'react-toastify';
+import { StateOfSearch } from './interfaces/enums';
+import { AppState } from './state/app.reducers';
+
+toast.configure();
 
 function App() {
+  const dispatch = useDispatch();
+  const currentState = useSelector(
+    (state: { appState: AppState }) => state.appState.currentState
+  );
+
+  useEffect(() => {
+    const trackScroll = () => {
+      const wrappedElement = document.getElementById('body');
+      if (
+        wrappedElement.getBoundingClientRect().bottom <=
+        window.innerHeight + window.innerHeight * 0.2
+      ) {
+        dispatch(fetchImages(currentState));
+      }
+    };
+    document.addEventListener('scroll', trackScroll);
+    return () => {
+      document.removeEventListener('scroll', trackScroll);
+    };
+  }, [currentState, dispatch]);
+
+  useEffect(() => {
+    dispatch(fetchImages(StateOfSearch.TRENDING));
+  }, [dispatch]);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className="container-fluid">
+        <Logo />
+        <Search />
+        <Grid />
+      </div>
     </div>
   );
 }
